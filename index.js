@@ -33,13 +33,53 @@ async function run() {
 
         // add or update a review api
         app.post('/reviews', async (req, res) => {
-            const { pname, email, description, title, photos, rating } = req.body;
+            const {
+                pid,
+                pname,
+                title,
+                description,
+                rating,
+                ratingLabel,
+                photos,
+                nickname,
+                location,
+                email,
+                mobile,
+                age,
+                gender,
+                skinType,
+                likeMost,
+                primaryReason,
+                usageFrequency,
+                usageDuration,
+                buyAgain
+            } = req.body;
 
             try {
                 // Check if a product with the same pname and email exists
                 const filter = { pname, email };
                 const update = {
-                    $set: { description, title, photos, rating },
+                    $set: {
+                        pid,
+                        pname,
+                        title,
+                        description,
+                        rating,
+                        ratingLabel,
+                        photos,
+                        nickname,
+                        location,
+                        email,
+                        mobile,
+                        age,
+                        gender,
+                        skinType,
+                        likeMost,
+                        primaryReason,
+                        usageFrequency,
+                        usageDuration,
+                        buyAgain
+                    },
                 };
                 const options = { upsert: true }; // Create the document if it doesn't exist
 
