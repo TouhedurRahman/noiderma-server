@@ -27,6 +27,34 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
+
+        // Select the database and collection
+        const reviewsCollection = client.db('noiderma_db').collection('reviews');
+
+        // add or update a review api
+        app.post('/reviews', async (req, res) => {
+            const { pname, email, description, title, photos, rating } = req.body;
+
+            try {
+                // Check if a product with the same pname and email exists
+                const filter = { pname, email };
+                const update = {
+                    $set: { description, title, photos, rating },
+                };
+                const options = { upsert: true }; // Create the document if it doesn't exist
+
+                const result = await reviewsCollection.updateOne(filter, update, options);
+
+                if (result.matchedCount > 0) {
+                    res.status(200).json({ message: 'Product updated successfully' });
+                } else {
+                    res.status(201).json({ message: 'New product created successfully' });
+                }
+            } catch (err) {
+                res.status(500).json({ message: 'Error saving product', error: err.message });
+            }
+        });
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
