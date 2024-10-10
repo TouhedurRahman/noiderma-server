@@ -97,7 +97,7 @@ async function run() {
 
         //get all reviews api
         app.get('/reviews', async (req, res) => {
-            const result = await reviewsCollection.find().toArray();
+            const result = await reviewsCollection.find().sort({ _id: -1 }).toArray();
             res.send(result);
         });
 
