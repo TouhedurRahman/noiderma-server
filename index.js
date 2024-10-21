@@ -30,6 +30,7 @@ async function run() {
 
         // Select the database and collection
         const reviewsCollection = client.db('noiderma_db').collection('reviews');
+        const queriesCollection = client.db('noiderma_db').collection('queries');
 
         // add or update a review api
         app.post('/reviews', async (req, res) => {
@@ -98,6 +99,14 @@ async function run() {
         //get all reviews api
         app.get('/reviews', async (req, res) => {
             const result = await reviewsCollection.find().sort({ _id: -1 }).toArray();
+            res.send(result);
+        });
+
+        // add new query api
+        app.post('/queries', async (req, res) => {
+            const newQuery = req.body;
+            newQuery.createdAt = new Date();
+            const result = await queriesCollection.insertOne(newQuery);
             res.send(result);
         });
 
